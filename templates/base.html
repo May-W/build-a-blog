@@ -11,9 +11,10 @@
     </head>
 <body>
 
-    <div>
-        <a href='/logout'>log out</a>
-    </div>
+    <nav>
+        <a href='/blog'>View Blog</a>
+        <a href='/newpost'>Add an entry</a>
+    </nav>
 
     {% with messages = get_flashed_messages(with_categories=True) %}
         <ul>
