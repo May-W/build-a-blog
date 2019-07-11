@@ -19,7 +19,7 @@ class Blog(db.Model):
         self.body = body
 
 @app.route('/', methods=['POST', 'GET'])
-def index():
+def blog():
 
     blogs = Blog.query.all()
     return render_template('blog.html', title="Build a blog!", blogs=blogs)
@@ -34,7 +34,10 @@ def index():
         db.session.add(new_entry)
         db.session.commit()
     
-    return render_template('newpost.html', title="Add Post", )
+    return render_template('newpost.html', title="Add Post")
+
+    #Need to redirect after sucessful post to blog page
+    #need to do validation to see if post is empty
 
 if __name__ == '__main__':
     app.run()
