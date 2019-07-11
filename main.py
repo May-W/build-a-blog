@@ -29,15 +29,17 @@ def index():
     if request.method == 'POST':
         title_name = request.form['title']
         body_name = request.form['body']
+        
+        if not title_name or not body_name:
+            flash('Please enter both a title and body text')
+            return render_template('newpost.html', title="Add Post", title_name = title_name, body_name = body_name)
 
         new_entry = Blog(title_name, body_name)
         db.session.add(new_entry)
         db.session.commit()
+        return redirect('/')
     
     return render_template('newpost.html', title="Add Post")
-
-    #Need to redirect after sucessful post to blog page
-    #need to do validation to see if post is empty
 
 if __name__ == '__main__':
     app.run()
