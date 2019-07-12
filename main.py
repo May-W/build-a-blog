@@ -18,18 +18,28 @@ class Blog(db.Model):
         self.title = title
         self.body = body
 
-@app.route('/', methods=['POST', 'GET'])
+
+@app.route('/')
+def index():
+    return redirect('/blog')
+
+@app.route('/blog', methods=['POST', 'GET'])
 def blog():
 
-    blogs = Blog.query.all()
-    return render_template('blog.html', title="Build a blog!", blogs=blogs)
+    if request.method == 'GET' and request.args.get('id') == None:
+        blogs = Blog.query.all()
+        return render_template('blog.html', title="Build a blog!", blogs=blogs)
+    else:   
+        id = request.args.get('id')
+        blogs = Blog.query.get(id)
+        return render_template('individualblog.html', title="Build a blog!", blogs=blogs)
 
 @app.route('/newpost', methods=['POST', 'GET'])
-def index():
+def newpost():
     if request.method == 'POST':
         title_name = request.form['title']
         body_name = request.form['body']
-        
+
         if not title_name or not body_name:
             flash('Please enter both a title and body text')
             return render_template('newpost.html', title="Add Post", title_name = title_name, body_name = body_name)
@@ -37,7 +47,7 @@ def index():
         new_entry = Blog(title_name, body_name)
         db.session.add(new_entry)
         db.session.commit()
-        return redirect('/')
+        return redirect('/blog?id={}'.format(new_entry.id)) 
     
     return render_template('newpost.html', title="Add Post")
 
